@@ -1,0 +1,29 @@
+[
+  {% for host in hosts %}
+  {
+    "supported_methods": [
+      {
+        "operation": "retrieve",
+        "path": "/getconfig",
+        "payload": {
+            "library": "netmiko",
+            "connection_args": {
+                "device_type": "cisco_ios",
+                "host": "{{host}}",
+                "username": "admin",
+                "password": "admin"
+            },
+            "command": "show ip route",
+            "args": {
+                "use_textfsm": true
+            },
+            "queue_strategy": "fifo",
+            "cache":{
+                "enabled":true
+            }
+        }
+      }
+    ]
+  }{% if not loop.last %},{% endif %}{# THIS IS REQUIRED TO CONSTRUCT THE DATA CORRECTLY #}
+  {% endfor -%}
+]
